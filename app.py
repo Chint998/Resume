@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import os
 
 app = Flask(__name__)
 
@@ -12,8 +13,14 @@ def submit():
     dob = request.form['dob']
     education = request.form['education']
     resume = request.files['resume']
-    # Save the resume to a folder named 'resumes'
-    resume.save('resumes/' + resume.filename)
+    
+    # Create the 'resumes' directory if it doesn't exist
+    if not os.path.exists('resumes'):
+        os.makedirs('resumes')
+    
+    # Save the resume to the 'resumes' directory
+    resume.save(os.path.join('resumes', resume.filename))
+    
     return render_template('success.html', name=name)
 
 if __name__ == '__main__':
